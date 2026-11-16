@@ -1,0 +1,17 @@
+torch
+torchvision
+transformers
+open_clip_torch
+Pillow
+numpy
+pandas
+scikit-learn
+matplotlib
+tqdm
+spacy
+nltk
+flask
+ultralytics
+openai-whisper
+imageio-ffmpeg
+werkzeug

@@ -1,0 +1,49 @@
+  const videoId = {{ (index.video_id if index else "")|tojson }};
+  const jobId = {{ (job_id if job_id else "")|tojson }};
+
+  if (jobId) {
+    const statusEl = document.getElementById("job-status");
+    function pollJob() {
+      fetch("/video/job/" + jobId).then(function (r) { return r.json(); }).then(function (data) {
+        if (statusEl) statusEl.textContent = data.message || data.status || "Working…";
+        if (data.status === "done" && data.video_id) {
+          window.location.href = "/video?id=" + data.video_id;
+          return;
+        }
+        if (data.status === "error") {
+          if (statusEl) {
+            statusEl.className = "warn";
+            statusEl.textContent = data.message || "Analysis failed.";
+          }
+          return;
+        }
+        setTimeout(pollJob, 1500);
+      }).catch(function () { setTimeout(pollJob, 2500); });
+    }
+    pollJob();
+  }
+
+  const retryAsr = document.getElementById("retry-asr");
+  if (retryAsr && videoId) {
+    retryAsr.addEventListener("click", function () {
+      retryAsr.disabled = true;
+      retryAsr.textContent = "Starting transcription…";
+      fetch("/video/transcribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ video_id: videoId })
+      }).then(function (r) { return r.json(); }).then(function (data) {
+        if (data.error) {
+          retryAsr.disabled = false;
+          retryAsr.textContent = "Retry speech transcription";
+          alert(data.error);
+          return;
+        }
+        window.location.href = "/video?id=" + videoId + "&job=" + data.job_id;
+      }).catch(function (err) {
+        retryAsr.disabled = false;
+        retryAsr.textContent = "Retry speech transcription";
+        alert(err);
+      });
+    });
+  }

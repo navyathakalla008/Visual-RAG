@@ -1,0 +1,29 @@
+{% if error %}
+<div class="card"><p class="warn">{{ error }}</p></div>
+{% endif %}
+
+{% if job_id %}
+<div class="card" id="job-card">
+<h2>Processing video</h2>
+<p class="info" id="job-status">Working… this can take several minutes for a long clip. Keep this tab open.</p>
+</div>
+{% endif %}
+
+{% if library %}
+<div class="card">
+<h2>Analyzed videos</h2>
+<p class="note">Open a finished analysis. The latest one is shown below.</p>
+<div class="library">
+{% for item in library %}
+<a class="result" href="/video?id={{ item.video_id }}">
+<strong>{{ item.original_name }}</strong>
+<div class="note">{{ item.scenes }} scenes · {{ "%.0f"|format(item.duration) }}s · {{ item.sampled_frames }} frames
+{% if item.has_transcript %}· transcript ready{% elif item.asr_error %}· speech pending{% endif %}
+</div>
+</a>
+{% endfor %}
+</div>
+</div>
+{% endif %}
+
+{% if index %}

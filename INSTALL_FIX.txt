@@ -1,0 +1,14 @@
+VisualRAG video features repair bundle
+
+1. Close every running VisualRAG / Python server window first (Ctrl+C in its terminal).
+2. BACK UP your project folder.
+3. Copy app.py, video_ui.py, and video_pipeline.py from this folder into:
+   C:\Users\HP\Downloads\VisualRAG_VPKE_code
+   Choose Replace when asked. The app.py source is your uploaded patched app with its UTF-8 BOM removed; video_ui.py and video_pipeline.py are your uploaded versions.
+4. Start from that project folder in PowerShell:
+   cd C:\Users\HP\Downloads\VisualRAG_VPKE_code
+   python app.py
+5. Open http://127.0.0.1:5000/video and upload the video again if no saved index exists.
+6. Keep the terminal open. Analysis uses local vision models and Whisper and can take a while. Errors are shown in the terminal and on the processing page.
+
+Features implemented in these source files: video timeline, scene boundaries/keyframes, object tracks, detected actions, speech transcript, and multimodal/transcript search. A full end-to-end model run cannot be verified on this packaging environment because the local model weights, dependencies, and video are on your PC.
